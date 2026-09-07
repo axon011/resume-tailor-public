@@ -36,6 +36,34 @@ output/<Prefix>_CoverLetter_<Company>_<YYYYMMDD>.pdf
 Then:  python ats_check.py output/<file>.pdf path/to/jd.txt
 ```
 
+## Upstream: job-search-toolkit
+
+This repo writes the application. Finding and filtering the roles is the job of
+[job-search-toolkit](https://github.com/axon011/job-search-toolkit), and the two are built
+to run as one pipeline:
+
+```
+job-search-toolkit                                   resume-tailor-public
+------------------                                   --------------------
+scan boards + Telegram      -> triage_scan.py
+                            -> auto_bodyread.py      fetches each JD, runs the blocker gate,
+                               caches it and prints:  next: python main.py --jd-file data/jd-cache/<id>.txt ...
+                                                  -> main.py       tailor, three gates, compile
+                                                  -> ats_check.py  score the PDF
+log the send in the ledger  <- (your ledger)      <-
+```
+
+- The `next:` line the body-read prints is a complete `main.py` invocation: the cached JD
+  as `--jd-file`, the company slug, the track it inferred from the title, `--cover-letter`.
+- Set `JD_GATE_PATH=<toolkit>/scanner` in `.env` and `main.py` runs the toolkit's
+  `jd_blocker_check` again as its own pre-flight, so a language wall or years floor stops
+  the run before any LLM call. `--force` overrides it for a deliberate long shot.
+- Track names must match between the toolkit's config and `candidate/gates.json`
+  `tracks`; the body-read chooses the track, the tailor tells the availability story for it.
+
+Each repo also runs alone. Without the toolkit, save a JD to a text file and pass it as
+`--jd-file`.
+
 ## Setup
 
 ### 1. Prerequisites
