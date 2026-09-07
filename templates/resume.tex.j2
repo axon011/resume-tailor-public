@@ -1,0 +1,159 @@
+%-------------------------
+% ATS-Optimized Resume Template
+% Header, links, languages and publications come from the candidate profile
+% (candidate/gates.json "header" and "publications"); everything else from the
+% tailored resume data.
+%-------------------------
+\documentclass[a4paper,10pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1.8cm, top=1.2cm, bottom=1.0cm]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{parskip}
+
+% Ensure generated PDF is machine-readable / ATS parsable
+% (mirrors the canonical Jake's Resume template's ATS-fix block)
+\input{glyphtounicode}
+\pdfgentounicode=1
+
+% Disable automatic hyphenation so words don't split across lines
+% (otherwise "rerank-\ning" extracts as "rerank-ing" — two tokens to ATS)
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+
+% Colors
+\definecolor{accent}{HTML}{1A568E}
+% The \section titleformat applies \uppercase, which also uppercases the color
+% name 'accent' -> 'ACCENT' when the title is re-expanded on a standalone
+% recompile. Define ACCENT as an alias so that never errors out.
+\definecolor{ACCENT}{HTML}{1A568E}
+\definecolor{darktext}{HTML}{222222}
+\definecolor{graytext}{HTML}{555555}
+
+% Hyperlink setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=accent,
+    urlcolor=accent,
+    pdfauthor={<< cand.name >>},
+    pdftitle={<< cand.pdf_title >>}
+}
+
+% Section formatting
+\titleformat{\section}
+  {\color{accent}\large\bfseries\uppercase}
+  {}{0em}{}
+  [\color{accent}\titlerule]
+\titlespacing{\section}{0pt}{10pt}{4pt}
+
+% Remove page numbers
+\pagestyle{empty}
+
+% Custom commands
+\newcommand{\jobtitle}[4]{%
+  \textbf{#1} \\
+  {\small\color{graytext}\textit{#2 \,|\, #3 \,|\, #4}}
+  \vspace{2pt}
+}
+
+\newcommand{\projecttitle}[2]{%
+  \textbf{#1} \\
+  {\small\color{graytext}#2}
+  \vspace{2pt}
+}
+
+\newcommand{\skillcat}[2]{%
+  {\color{accent}\textbf{#1}}: #2
+}
+
+\newcommand{\edutitle}[4]{%
+  \textbf{#1} \\
+  {\small\color{graytext}\textit{#2 \,|\, #3 \,|\, #4}}
+  \vspace{2pt}
+}
+
+% Tight bullet list
+\setlist[itemize]{leftmargin=1.5em, itemsep=1pt, parsep=0pt, topsep=2pt}
+
+\begin{document}
+
+% ─── HEADER ───
+\begin{center}
+  {\LARGE\bfseries\color{accent} << cand.name >>} \\[4pt]
+  {\color{graytext} << tagline >>} \\[3pt]
+  {\small << location | default(cand.location, true) >><% if cand.phone %> \,|\, << cand.phone >><% endif %><% if cand.email %> \,|\, \href{mailto:<< cand.email >>}{<< cand.email >>}<% endif %>} \\[2pt]
+<% if cand_links %>  {\small <% for url, text in cand_links %>\href{<< url >>}{<< text >>}<% if not loop.last %> \,|\, <% endif %><% endfor %>}<% if cand.languages %> \\[2pt]<% endif %>
+<% endif %><% if cand.languages %>  % Languages in the header: a cited hiring factor for international candidates —
+  % must be in the first screenful, never buried in page-2 skills.
+  {\small << cand.languages >>}
+<% endif %>\end{center}
+
+% ─── PROFESSIONAL SUMMARY ───
+\section{Professional Summary}
+<< summary >>
+
+% ─── PROFESSIONAL EXPERIENCE ───
+\section{Professional Experience}
+
+<% for exp in experience %>
+\jobtitle{<< exp.title >>}{<< exp.company >>}{<< exp.location >>}{<< exp.dates >>}
+<% if exp.bullets %>
+\begin{itemize}
+<% for bullet in exp.bullets %>
+  \item << bullet >>
+<% endfor %>
+\end{itemize}
+<% endif %>
+
+<% endfor %>
+<% if publications %>% ─── PUBLICATIONS ───
+% From the profile, not the LLM: keep the wording identical to the base CV or the
+% claim-backing gate has nothing to trace the numbers to.
+\section{Publications}
+
+\begin{itemize}
+<% for pub in publications %>
+  \item \textbf{<< pub.title >>} << pub.authors >><% if pub.venue %> << pub.venue >><% endif %><% if pub.link %> \href{<< pub.link >>}{<< pub.link_text | default(pub.link, true) >>}<% endif %>
+<% if pub.note %>  \item << pub.note >>
+<% endif %><% endfor %>
+\end{itemize}
+
+<% endif %>% ─── PROJECTS ───
+\section{Projects}
+
+<% for proj in projects %>
+\projecttitle{<< proj.title >>}{<< proj.tech_stack >>}
+\begin{itemize}
+<% for bullet in proj.bullets %>
+  \item << bullet >>
+<% endfor %>
+\end{itemize}
+
+<% endfor %>
+% ─── SKILLS ───
+\section{Skills}
+
+<% for cat_name, cat_items in skills.items() %>
+\skillcat{<< cat_name >>}{<< cat_items >>}
+
+<% endfor %>
+% ─── EDUCATION ───
+\section{Education}
+
+<% for edu in education %>
+\edutitle{<< edu.title >>}{<< edu.institution >>}{<< edu.location >>}{<< edu.dates >>}
+<% if edu.bullets %>
+\begin{itemize}
+<% for bullet in edu.bullets %>
+  \item << bullet >>
+<% endfor %>
+\end{itemize}
+<% endif %>
+
+<% endfor %>
+\end{document}

@@ -1,0 +1,163 @@
+{
+  "_comment": "Synthetic example profile for 'Jane Example'. Copy this directory to candidate/ and replace every value with your own. Regexes are Python re syntax, case-insensitive.",
+  "primary_employer": "Acme IoT",
+  "employers": [
+    {
+      "name": "Acme IoT",
+      "aliases": [
+        "acmehub",
+        "sensorflow",
+        "mqtt"
+      ],
+      "production_ok": true,
+      "frozen_bullets": true,
+      "frozen_title": "Software Engineer",
+      "protected_clauses": [
+        "built the ingestion and evaluation layer behind AcmeHub",
+        "sub-200ms p95"
+      ],
+      "banned_additions": [
+        "agentic",
+        "multi-agent",
+        "production rag"
+      ]
+    },
+    {
+      "name": "Globex Bank",
+      "aliases": [
+        "cobol",
+        "mainframe",
+        "banking"
+      ],
+      "production_ok": true
+    }
+  ],
+  "personal_projects": {
+    "vocabulary": [
+      "multi[\\s-]?agent",
+      "graph[\\s-]?search[\\s-]?kit",
+      "recipe[\\s-]?rag",
+      "lora[\\s-]?tuner"
+    ],
+    "claimgate_vocabulary": [
+      {
+        "pattern": "multi[\\s-]?agent|langgraph|crewai",
+        "label": "agent orchestration (personal)"
+      },
+      {
+        "pattern": "graph[\\s-]?search|knowledge graph",
+        "label": "graph search (personal)"
+      },
+      {
+        "pattern": "\\bragas\\b|llm[\\s-]as[\\s-]a?[\\s-]?judge",
+        "label": "eval harness (personal)"
+      },
+      {
+        "pattern": "langfuse|mlflow",
+        "label": "LLMOps tooling (personal)"
+      },
+      {
+        "pattern": "\\blora\\b|fine[\\s-]?tun",
+        "label": "fine-tuning (personal)"
+      },
+      {
+        "pattern": "hit@\\d|presence accuracy",
+        "label": "retrieval metric (personal)"
+      }
+    ],
+    "cover_split_vocabulary": "multi[\\s-]?agent|graph[\\s-]?search|recipe[\\s-]?rag|lora[\\s-]?tuner",
+    "github_marker": "github\\.com/jane-example",
+    "live_project": {
+      "pattern": "recipe[\\s-]?rag|recipes\\.jane-example\\.dev",
+      "name": "Recipe-RAG (recipes.jane-example.dev)"
+    }
+  },
+  "realtime_ok": "\\bMQTT\\b|sensor|\\bstream|\\bIoT\\b|telemetry|broker",
+  "real_metric_values": [
+    "0.91",
+    "0.95"
+  ],
+  "banned_phrases": [
+    {
+      "pattern": "\\bwork\\s+permit\\s+holder\\b",
+      "reason": "never state immigration status as a claim"
+    },
+    {
+      "pattern": "\\bavailab\\w*[^.\\n]{0,40}?immediat",
+      "reason": "immediate-availability claim contradicts the profile's availability story"
+    },
+    {
+      "pattern": "\\bab\\s+sofort\\b",
+      "reason": "immediate-availability claim contradicts the profile's availability story"
+    },
+    {
+      "pattern": "\\b(?:can|could|able\\s+to)\\s+start\\s+(?:work\\s+)?(?:immediat\\w*|right\\s+away|now)\\b",
+      "reason": "immediate-availability claim contradicts the profile's availability story"
+    },
+    {
+      "pattern": "\\bavailab\\w*\\s+(?:right\\s+)?now\\b",
+      "reason": "immediate-availability claim contradicts the profile's availability story"
+    },
+    {
+      "pattern": "\\bimmediat\\w*\\s+availab",
+      "reason": "immediate-availability claim contradicts the profile's availability story"
+    },
+    {
+      "pattern": "\\bneo4j\\b",
+      "reason": "Neo4j is not in the real stack (graph-search-kit uses NetworkX)"
+    },
+    {
+      "pattern": "\\bllama[\\s-]?index\\b",
+      "reason": "LlamaIndex is not in the real stack (LangChain/LangGraph)"
+    }
+  ],
+  "auto_strip_sentences": [
+    "\\bwork\\s+permit\\s+holder\\b"
+  ],
+  "never_claim_tools": [
+    "Neo4j",
+    "LlamaIndex",
+    "Terraform"
+  ],
+  "tracks": {
+    "fulltime": {
+      "availability": "Available full-time from the start of next quarter; state it once, plainly, in the closing paragraph.",
+      "cover_directive": "AVAILABILITY DIRECTIVE (track: fulltime): one sentence in the final paragraph stating full-time availability from next quarter. Never offer part-time hours.",
+      "base_resume_env": "RESUME_TEX_PATH"
+    },
+    "parttime": {
+      "availability": "Enrolled student, available around 20 hours a week for the next 12 months; lead with the duration.",
+      "cover_directive": "AVAILABILITY DIRECTIVE (track: parttime): state ~20 h/week and the remaining duration in months. Never offer an immediate full-time start.",
+      "base_resume_env": "RESUME_TEX_PATH_PARTTIME",
+      "geo_header": true,
+      "_geo_header_note": "geo_header: the resume header answers the geography question on this track (home_cities or an explicit relocation line)"
+    }
+  },
+  "default_track": "fulltime",
+  "home_cities": {
+    "berlin": "Berlin, Germany",
+    "potsdam": "Berlin, Germany"
+  },
+  "header": {
+    "name": "Jane Example",
+    "phone": "+49 30 000000",
+    "email": "jane@example.dev",
+    "linkedin": "linkedin.com/in/jane-example",
+    "github": "github.com/jane-example",
+    "website": "jane-example.dev",
+    "pdf_title": "Jane Example - Software Engineer Resume",
+    "location": "Berlin, Germany",
+    "degree": "M.Sc. Computer Science, Example University",
+    "languages": "English (C2) \\,|\\, German (B2)"
+  },
+  "publications": [
+    {
+      "title": "Sparse Token Routing for Small Vision Transformers.",
+      "authors": "\\underline{J.\\ Example}, A.\\ Coauthor.",
+      "venue": "Workshop on Efficient ML, 2026.",
+      "link": "https://arxiv.org/abs/0000.00000",
+      "link_text": "arXiv:0000.00000",
+      "note": "Routes tokens to cheap heads; 30\\% lower inference energy on ImageNet-100 at matched accuracy."
+    }
+  ]
+}

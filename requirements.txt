@@ -1,0 +1,8 @@
+openai>=1.0
+requests
+beautifulsoup4
+lxml
+jinja2
+python-dotenv
+httpx
+pymupdf

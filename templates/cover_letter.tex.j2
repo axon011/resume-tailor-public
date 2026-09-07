@@ -1,0 +1,61 @@
+\documentclass[a4paper,10pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=2.5cm, top=2.0cm, bottom=2.0cm]{geometry}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{parskip}
+
+% Ensure generated PDF is machine-readable / ATS parsable
+\input{glyphtounicode}
+\pdfgentounicode=1
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+
+% Colors (matching resume)
+\definecolor{accent}{HTML}{1A568E}
+\definecolor{darktext}{HTML}{222222}
+\definecolor{graytext}{HTML}{555555}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=accent,
+    urlcolor=accent,
+}
+
+\pagestyle{empty}
+
+\begin{document}
+
+% ─── HEADER ───
+\begin{center}
+  {\LARGE\bfseries\color{accent} << cand.name >>} \\[4pt]
+  {\small << location | default(cand.location, true) >><% if cand.phone %> \,|\, << cand.phone >><% endif %><% if cand.email %> \,|\, \href{mailto:<< cand.email >>}{<< cand.email >>}<% endif %>} \\[2pt]
+<% if cand_links %>  {\small <% for url, text in cand_links %>\href{<< url >>}{<< text >>}<% if not loop.last %> \,|\, <% endif %><% endfor %>}
+<% endif %>\end{center}
+
+\vspace{12pt}
+
+% ─── DATE ───
+\noindent << date >>
+
+\vspace{8pt}
+
+% ─── GREETING ───
+\noindent << greeting >>
+
+\vspace{4pt}
+
+% ─── BODY ───
+<% for para in paragraphs %>
+<< para >>
+
+<% endfor %>
+% ─── SIGN OFF ───
+\vspace{8pt}
+\noindent Best regards,\\
+<< cand.name >>
+
+\end{document}

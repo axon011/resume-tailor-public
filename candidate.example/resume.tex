@@ -1,0 +1,92 @@
+%-------------------------
+% Example base resume for "Jane Example" — synthetic. The pipeline parses this file:
+% keep the macro names (\jobtitle, \projecttitle, \skillcat, \edutitle) and the section
+% titles (Professional Summary / Professional Experience / Projects / Technical Skills /
+% Education). Everything else is yours to change.
+%-------------------------
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1.8cm, top=1.2cm, bottom=1.0cm]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{parskip}
+\definecolor{accent}{HTML}{1A568E}
+\definecolor{graytext}{HTML}{555555}
+\titleformat{\section}{\color{accent}\large\bfseries\uppercase}{}{0em}{}[\color{accent}\titlerule]
+\titlespacing{\section}{0pt}{10pt}{4pt}
+\pagestyle{empty}
+\newcommand{\jobtitle}[4]{\textbf{#1} \\ {\small\color{graytext}\textit{#2 \,|\, #3 \,|\, #4}}\vspace{2pt}}
+\newcommand{\projecttitle}[2]{\textbf{#1} \;\;{\small\color{graytext}|\;\; #2}\vspace{1pt}}
+\newcommand{\skillcat}[2]{{\color{accent}\textbf{#1}}: #2}
+\newcommand{\edutitle}[4]{\textbf{#1} \\ {\small\color{graytext}\textit{#2 \,|\, #3 \,|\, #4}}\vspace{1pt}}
+\setlist[itemize]{leftmargin=1.5em, itemsep=0pt, parsep=0pt, topsep=0pt}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries\color{accent} Jane Example} \\[4pt]
+  {\color{graytext} Software Engineer \,|\, Backend \& Applied ML \,|\, IoT Data} \\[3pt]
+  {\small Berlin, Germany \,|\, +49 30 000000 \,|\, \href{mailto:jane@example.dev}{jane@example.dev}}
+\end{center}
+
+\section{Professional Summary}
+Software Engineer with two years at Acme IoT building the backend of an industrial sensor platform: Python and Go services over MQTT streams, FastAPI, Docker, Kubernetes, and CI/CD, plus the ingestion and evaluation layer behind AcmeHub. Independently I build and maintain retrieval and agent systems: recipe-rag (live), graph-search-kit, a multi-agent pipeline and lora-tuner. First author of arXiv:0000.00000. Two years of professional software experience in total, including earlier banking work at Globex Bank; M.Sc.\ Computer Science, thesis phase.
+
+\section{Professional Experience}
+
+\jobtitle{Software Engineer}{Acme IoT}{Berlin, Germany}{Jan 2024 -- Dec 2025}
+\begin{itemize}
+  \item Developed Python and Go backend services connecting LLM workflows to live MQTT sensor streams, exposed as versioned FastAPI REST APIs; containerized with Docker/Kubernetes and automated CI/CD via GitHub Actions for zero-touch production releases.
+  \item Owned the ingestion and evaluation workstream; built the ingestion and evaluation layer behind AcmeHub and measured retrieval speed (sub-200ms p95), generation quality, and trade-offs across model variants.
+  \item Built an analytics pipeline pulling web analytics through MQTT into a dashboard; cut reporting lag from roughly 48 hours to a daily refresh.
+\end{itemize}
+
+\jobtitle{Software Engineer Trainee}{Globex Bank}{Frankfurt, Germany}{Mar 2023 -- Nov 2023}
+\begin{itemize}
+  \item Developed and maintained mainframe applications (COBOL) in agile sprints with production deployment discipline across banking systems.
+\end{itemize}
+
+\section{Projects}
+
+\projecttitle{Recipe-RAG --- Live Cooking Assistant \,|\, \href{https://recipes.jane-example.dev}{recipes.jane-example.dev}}{Next.js, TypeScript, FastAPI, Qdrant, LangChain, RAGAs}
+\begin{itemize}
+  \item Built a hybrid retrieval pipeline (dense embeddings + BM25 + Reciprocal Rank Fusion) over a 40-topic corpus, reaching 0.91 hit@5 and 0.95 citation presence on a 60-question evaluation set.
+  \item Shipped a streaming chat front end (Next.js, SSE) over a containerized FastAPI backend with GitHub Actions CI and 15 tests.
+\end{itemize}
+
+\projecttitle{graph-search-kit}{Python, networkx, LLM Entity/Relation Extraction, Docker}
+\begin{itemize}
+  \item Built a GraphRAG pipeline that constructs a typed knowledge graph from a document corpus via LLM entity/relation extraction (networkx) and answers relationship-spanning questions with k-hop subgraph retrieval.
+\end{itemize}
+
+\projecttitle{Multi-Agent Research Pipeline}{LangGraph, CrewAI, FastAPI, Docker}
+\begin{itemize}
+  \item Architected a 4-agent pipeline (Planner, Researcher, Writer, Critic) with LangGraph state machines and Pydantic structured outputs, producing 2,000+ word reports with verifiable citations; containerized, CI-tested.
+\end{itemize}
+
+\projecttitle{lora-tuner}{PyTorch, PEFT, 4-bit Quantization}
+\begin{itemize}
+  \item Fine-tuned a 0.5B model with LoRA (rank 16) to extract structured JSON from job descriptions; 100\% JSON validity and 70\%+ field accuracy on a held-out set, trained in under 5 minutes on a 4GB GPU.
+\end{itemize}
+
+\section{Technical Skills}
+
+\skillcat{AI \& Agents}{LangGraph, LangChain, CrewAI, RAG, GraphRAG, Prompt Engineering, Structured Outputs (Pydantic), Tool Use}
+\skillcat{LLMOps \& Evaluation}{Langfuse (Tracing, Evals), RAGAs (Faithfulness, Relevance), MLflow, LLM-as-Judge, Guardrails}
+\skillcat{ML \& NLP}{Python, PyTorch, Hugging Face Transformers, scikit-learn, Fine-Tuning (LoRA, PEFT), Embeddings}
+\skillcat{Backend \& Infra}{Go, FastAPI, REST/gRPC, Docker, Kubernetes, GitHub Actions, PostgreSQL, Qdrant, SQL, Linux, AWS (S3, EC2)}
+\skillcat{Frontend}{TypeScript, React, Next.js}
+\skillcat{Languages}{English (C1), German (B1)}
+
+\section{Education}
+
+\edutitle{M.Sc.\ Computer Science}{Example University}{Berlin, Germany}{Oct 2022 -- present (thesis phase)}
+\begin{itemize}
+  \item Thesis: Sparse token routing for small vision transformers.
+\end{itemize}
+
+\end{document}

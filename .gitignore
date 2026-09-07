@@ -1,0 +1,25 @@
+# --- YOUR data: never committed ---
+# your profile: base CV, rules.md, gates.json (copy candidate.example/ to start)
+candidate/
+.env
+*.env.local
+output/
+data/
+*.pdf
+.github_cache.json
+last_llm_raw.txt
+*-run.log
+
+# Python / build
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.venv*/
+*.aux
+*.log
+*.out
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
