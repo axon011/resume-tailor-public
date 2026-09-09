@@ -53,6 +53,15 @@ _SKILLCAT = re.compile(r"\\skillcat\{(.+?)\}\{(.+?)\}", re.S)
 _JOBTITLE = re.compile(r"\\jobtitle\{(.+?)\}\{(.+?)\}")
 
 
+# Layout-only commands carry digits that are not claims: \needspace{6\baselineskip}
+# left a bare '6' after _strip_tex and blocked a resume (2026-09-09). Drop them whole.
+_LAYOUT_ONLY = re.compile(r"\\(?:needspace|vspace\*?|hspace\*?|smallskip|medskip|bigskip|newpage|clearpage|pagebreak|nopagebreak)\s*(?:\{[^}]*\})?")
+
+
+def strip_layout(s: str) -> str:
+    return _LAYOUT_ONLY.sub(" ", s)
+
+
 def _strip_tex(s: str) -> str:
     """Drop the LaTeX escaping that would otherwise break token comparison."""
     s = re.sub(r"\\[a-zA-Z]+\s*", " ", s)     # control sequences
@@ -562,6 +571,9 @@ def check_claims(
                 base = _p.read_text(encoding="utf-8")
         except OSError:
             pass
+
+    tex = strip_layout(tex)
+    base = strip_layout(base)
 
     # Severity is split deliberately.
     #

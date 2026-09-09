@@ -287,3 +287,12 @@ def test_cover_letter_employer_alone_is_clean():
 
 def test_prose_check_does_not_fire_without_the_employer():
     check_claims("I built multi-agent systems with sub-200ms p95 latency.", BASE, "cover")
+
+
+def test_layout_commands_are_not_numbers():
+    """\\needspace{6\\baselineskip} is layout, not a claim; it blocked a resume on 2026-09-09."""
+    tex = "\\needspace{6\\baselineskip}\n\\vspace{2pt}\n" + BASE
+    check_claims(tex, BASE, "resume")          # must not raise
+    with pytest.raises(ClaimError, match="'47'"):   # and the strip must not hide a real invented number
+        check_claims("\\needspace{6\\baselineskip}\n" + BASE.replace("Led the containerization workstream",
+                     "Led the containerization workstream across 47 services", 1), BASE, "resume")
