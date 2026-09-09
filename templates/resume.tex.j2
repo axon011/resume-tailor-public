@@ -100,6 +100,7 @@
 << summary >>
 
 % ─── PROFESSIONAL EXPERIENCE ───
+\needspace{4\baselineskip}
 \section{Professional Experience}
 
 <% for exp in experience %>
@@ -117,6 +118,7 @@
 <% if publications %>% ─── PUBLICATIONS ───
 % From the profile, not the LLM: keep the wording identical to the base CV or the
 % claim-backing gate has nothing to trace the numbers to.
+\needspace{4\baselineskip}
 \section{Publications}
 
 \begin{itemize}
@@ -127,6 +129,7 @@
 \end{itemize}
 
 <% endif %>% ─── PROJECTS ───
+\needspace{4\baselineskip}
 \section{Projects}
 
 <% for proj in projects %>
@@ -140,6 +143,7 @@
 
 <% endfor %>
 % ─── SKILLS ───
+\needspace{4\baselineskip}
 \section{Skills}
 
 <% for cat_name, cat_items in skills.items() %>
@@ -147,9 +151,11 @@
 
 <% endfor %>
 % ─── EDUCATION ───
+\needspace{4\baselineskip}
 \section{Education}
 
 <% for edu in education %>
+\needspace{5\baselineskip}
 \edutitle{<< edu.title >>}{<< edu.institution >>}{<< edu.location >>}{<< edu.dates >>}
 <% if edu.bullets %>
 \begin{itemize}

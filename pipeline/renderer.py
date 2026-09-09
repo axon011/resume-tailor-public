@@ -186,6 +186,11 @@ def compile_pdf(tex_content: str, output_dir: str, filename: str) -> str:
             f"{detail}\nstdout: {(result.stdout or '')[-500:]}"
         )
 
+    # A heading alone at the foot of a page (H.E.A.T. 2026-09-09: project title + tech
+    # line on page 1, bullets on page 2) is a layout defect the template's needspace
+    # should prevent; this check makes sure it never ships if it slips through.
+    _check_orphaned_headings(pdf_path, tex_content, filename)
+
     # Clean aux files
     for ext in [".aux", ".log", ".out"]:
         aux_file = os.path.join(output_dir, f"{filename}{ext}")
@@ -193,3 +198,61 @@ def compile_pdf(tex_content: str, output_dir: str, filename: str) -> str:
             os.remove(aux_file)
 
     return pdf_path
+
+
+# ── orphaned-heading check ──────────────────────────────────────────────────
+
+_HEADING_CMDS = re.compile(r"\\(?:section|jobtitle|projecttitle|edutitle)\s*\{")
+
+
+def _tex_headings(tex: str) -> set:
+    """Plain-text forms of every heading the document declares (first brace argument)."""
+    out = set()
+    for m in _HEADING_CMDS.finditer(tex):
+        i, depth, j = m.end(), 1, m.end()
+        while j < len(tex) and depth:
+            depth += {"{": 1, "}": -1}.get(tex[j], 0)
+            j += 1
+        out.add(_plain(tex[i:j - 1]))
+    return {h for h in out if len(h) > 3}
+
+
+def _plain(s: str) -> str:
+    s = re.sub(r"\\href\{[^}]*\}\{([^}]*)\}", r"\1", s)
+    s = re.sub(r"\\[a-zA-Z]+\s*", " ", s)
+    s = s.replace("\\&", "&").replace("\\%", "%").replace("\\_", "_")
+    s = re.sub(r"[{}$~|,]", " ", s)
+    return re.sub(r"\s+", " ", s).strip().lower()
+
+
+def _check_orphaned_headings(pdf_path: str, tex_content: str, filename: str) -> None:
+    """Raise if any page except the last ends on a heading or a tech-stack line."""
+    try:
+        import fitz  # PyMuPDF
+    except ImportError:
+        try:
+            from pypdf import PdfReader
+            pages = [p.extract_text() or "" for p in PdfReader(pdf_path).pages]
+        except ImportError:
+            print("   [warn] orphan check skipped: install PyMuPDF or pypdf")
+            return
+    else:
+        doc = fitz.open(pdf_path)
+        pages = [p.get_text() for p in doc]
+        doc.close()
+    if len(pages) < 2:
+        return
+    headings = _tex_headings(tex_content)
+    if not headings:
+        return
+    for idx, text in enumerate(pages[:-1], start=1):
+        lines = [l.strip() for l in text.splitlines() if l.strip()]
+        if not lines:
+            continue
+        tail = [_plain(l) for l in lines[-2:]]
+        hit = next((h for h in headings if any(t == h or (len(h) > 12 and t.startswith(h[:40])) for t in tail)), None)
+        if hit:
+            raise RuntimeError(
+                f"Orphaned heading in {filename}.pdf: page {idx} ends on '{hit}' with its body on the "
+                f"next page. The template's needspace should have prevented this; add a "
+                f"\\needspace before that heading in output/{filename}.tex and recompile.")
