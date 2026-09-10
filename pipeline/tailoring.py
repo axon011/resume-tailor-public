@@ -56,6 +56,13 @@ _JOB_CITY_RE = re.compile(
     r"Regensburg|Ingolstadt|W[uü]rselen|Herzogenrath|Paderborn|H[uü]rth|Weinheim)\b")
 
 
+# "Remote" postings keep the stable header: there is nothing to relocate to. Hybrid counts
+# as on-site (the office exists and a screener will ask).
+_REMOTE_RE = re.compile(
+    r"(?i)\b(?:100\s*%\s*remote|fully\s+remote|remote[\s-]+first|remote\s+within\s+germany|"
+    r"remote\s*\(?germany\)?|work\s+from\s+anywhere|vollst[aä]ndig\s+remote|komplett\s+remote)\b")
+
+
 def _job_city(jd_text: str):
     """First German city named in the JD, or None. Order of appearance wins."""
     m = _JOB_CITY_RE.search(jd_text or "")
@@ -86,8 +93,8 @@ def _extract_job_location(jd_text: str, override: str = None, track: str = None)
 
     Defaults to "{CANDIDATE_LOCATION} (open to relocate)" — one stable string,
     which keeps the header consistent with LinkedIn and avoids a per-app
-    credibility gap. The JD city is NEVER used: a Munich posting must not make
-    him claim to live in Munich.
+    credibility gap. Since 2026-09-10 the JD city IS used for on-site postings
+    outside a home city, but only ever as "(relocating)", never as a residence.
 
     `override` exists for a candidate with more than one real address, where which
     one to state depends on where the job is. Pass it explicitly via
@@ -98,6 +105,24 @@ def _extract_job_location(jd_text: str, override: str = None, track: str = None)
     if override:
         loc = override.strip()
         return loc if "(" in loc else f"{loc} (open to relocate)"
+    # 2026-09-10, Aravind: "in 93 we got around 4, that is a good rate". The JD-city
+    # "(relocating)" header ran 04-01..04-27: 93 applications, 4 interviews + 1 agency
+    # screen, all from NON-local companies. Since 04-28 the fixed "open to relocate"
+    # header ran 574 applications for 6 interviews, all of them local to his real
+    # address. Confounded (volume, Perinet ending, document decay), but consistent with
+    # screeners filtering on the address line. So for an ON-SITE posting in a city he
+    # does not live in, print that city with an explicit "(relocating)"; a home city
+    # prints the real address; remote or no city keeps the stable string. Reversible
+    # with HEADER_RELOCATE_TO_JD_CITY=0. LinkedIn still shows his real city; the
+    # honesty line is the word "relocating", which promises a move, never a residence.
+    if config.HEADER_RELOCATE_TO_JD_CITY:
+        city = _job_city(jd_text)
+        if city:
+            home = _HOME_CITIES.get(city.lower())
+            if home:
+                return home
+            if not _REMOTE_RE.search(jd_text or ""):
+                return f"{city}, Germany (relocating)"
     return f"{config.CANDIDATE_LOCATION} (open to relocate)"
 
 

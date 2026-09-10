@@ -49,6 +49,11 @@ if _missing:
 CANDIDATE_CONTEXT = os.getenv("CANDIDATE_CONTEXT", "").strip()
 
 # Prefix for generated resume/cover letter filenames, e.g. "Jane_Doe" -> Jane_Doe_acme_20260417.pdf
+# Resume header for on-site full-time postings outside a home city: the JD's city with
+# "(relocating)" (1, the 04-2026 behaviour that converted at 4.3%) or the stable
+# "<home> (open to relocate)" (0). See pipeline/tailoring._extract_job_location.
+HEADER_RELOCATE_TO_JD_CITY = os.getenv("HEADER_RELOCATE_TO_JD_CITY", "1").strip() not in ("0", "false", "no", "")
+
 OUTPUT_FILENAME_PREFIX = os.getenv("OUTPUT_FILENAME_PREFIX", "Tailored_Resume")
 
 # ---------------------------------------------------------------------------
